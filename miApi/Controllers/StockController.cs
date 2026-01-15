@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using miApi.Data;
+using miApi.Dtos.Stock;
 using miApi.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -32,7 +33,7 @@ namespace miApi.Controllers
         public IActionResult GetById([FromRoute] int id)
         {
             var stock = _context.Stock.Find(id);
-            
+
             if (stock == null)
             {
                 return NotFound();
@@ -40,6 +41,22 @@ namespace miApi.Controllers
 
             return Ok(stock.ToStockDto());
         }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateStockRequest stockDto)
+        {
+            var stockModel = stockDto.ToStockFromCreateDTO();
+
+            _context.Stock.Add(stockModel);
+            _context.SaveChanges();
+
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = stockModel.Id },
+                stockModel.ToStockDto()
+                );
+        }
+
 
 
     }
