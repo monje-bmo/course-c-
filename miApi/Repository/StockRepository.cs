@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using miApi.Data;
+using miApi.Dtos.Stock;
 using miApi.Interfaces;
 using miApi.models;
 using Microsoft.EntityFrameworkCore;
+using miApi.Mappers;
+
 
 namespace miApi.Repository
 {
@@ -16,9 +19,55 @@ namespace miApi.Repository
         {
             _context = context;
         }
-        public Task<List<Stock>> GetAllAsync()
+
+        public async Task<Stock> CreateAsync(Stock stockModel)
         {
-            return _context.Stock.ToListAsync();
+            await _context.Stock.AddAsync(stockModel);
+            await _context.SaveChangesAsync();
+            return stockModel;
+        }
+
+        public async Task<Stock?> DelteAsync(int id)
+        {
+            var stockModel = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
+            if (stockModel == null)
+            {
+                return null;
+            };
+
+            _context.Stock.Remove(stockModel);
+            await _context.SaveChangesAsync();
+            return stockModel;  
+        }
+
+        public async Task<List<Stock>> GetAllAsync()
+        {
+            return await _context.Stock.ToListAsync();
+        }
+
+        public async Task<Stock?> GetByIdAsyn(int id)
+        {
+            return await _context.Stock.FindAsync(id);
+        }
+
+        public async Task<Stock?> UpdateAsync(int id, UpdateStockRequest stockDto)
+        {
+            var stockModel = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (stockModel == null)
+            {
+                return null;
+            }
+
+            stockModel.Symbol = stockDto.Symbol;
+            stockModel.CompanyName = stockDto.CompanyName;
+            stockModel.Purchase = stockDto.Purchase;
+            stockModel.LastDiv = stockDto.LastDiv;
+            stockModel.Industry = stockDto.Industry;
+            stockModel.MarketCap = stockDto.MarketCap;
+
+            await _context.SaveChangesAsync();
+            return stockModel;
         }
     }
 }
