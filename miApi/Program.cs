@@ -1,4 +1,6 @@
 using miApi.Data;
+using miApi.Interfaces;
+using miApi.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +17,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
     
 });
 
+builder.Services.AddScoped<IStockRepository, StockRepository>();
 
 var app = builder.Build();
 
