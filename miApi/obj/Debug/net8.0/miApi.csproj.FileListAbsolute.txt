@@ -135,3 +135,4 @@
 /home/bmo/Documents/api-dotnet/miApi/obj/Debug/net8.0/miApi.pdb
 /home/bmo/Documents/api-dotnet/miApi/obj/Debug/net8.0/miApi.genruntimeconfig.cache
 /home/bmo/Documents/api-dotnet/miApi/obj/Debug/net8.0/ref/miApi.dll
+/home/bmo/Documents/api-dotnet/miApi/obj/Debug/net8.0/miApi.sourcelink.json
