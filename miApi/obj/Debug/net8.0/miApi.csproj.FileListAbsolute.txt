@@ -136,3 +136,7 @@
 /home/bmo/Documents/api-dotnet/miApi/obj/Debug/net8.0/miApi.genruntimeconfig.cache
 /home/bmo/Documents/api-dotnet/miApi/obj/Debug/net8.0/ref/miApi.dll
 /home/bmo/Documents/api-dotnet/miApi/obj/Debug/net8.0/miApi.sourcelink.json
+/home/bmo/Documents/api-dotnet/miApi/bin/Debug/net8.0/Microsoft.AspNetCore.JsonPatch.dll
+/home/bmo/Documents/api-dotnet/miApi/bin/Debug/net8.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+/home/bmo/Documents/api-dotnet/miApi/bin/Debug/net8.0/Newtonsoft.Json.dll
+/home/bmo/Documents/api-dotnet/miApi/bin/Debug/net8.0/Newtonsoft.Json.Bson.dll
