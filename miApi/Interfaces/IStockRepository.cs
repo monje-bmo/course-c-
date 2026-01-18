@@ -14,5 +14,6 @@ namespace miApi.Interfaces
         Task<Stock> CreateAsync(Stock stockModel);
         Task<Stock?> UpdateAsync(int id, UpdateStockRequest stockDto);
         Task<Stock?> DelteAsync(int id);
+        Task<bool> StockExists(int id);
     }
 }

@@ -21,5 +21,14 @@ namespace miApi.Mappers
 
             };
         }
+        public static Comment ToCommentFromCreate(this CreateCommentDto commentDto, int stockID)
+        {
+            return new Comment
+            {
+                Title = commentDto.Title,
+                Content = commentDto.Content,
+                StockId = stockID
+            };
+        }
     }
 }

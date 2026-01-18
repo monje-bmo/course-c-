@@ -52,6 +52,11 @@ namespace miApi.Repository
             .FirstOrDefaultAsync(i => i.Id == id);
         }
 
+        public Task<bool> StockExists(int id)
+        {
+            return _context.Stock.AnyAsync(s => s.Id == id);
+        }
+
         public async Task<Stock?> UpdateAsync(int id, UpdateStockRequest stockDto)
         {
             var stockModel = await _context.Stock.FirstOrDefaultAsync(x => x.Id == id);

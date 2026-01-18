@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using miApi.Dtos.Comment;
 using miApi.Interfaces;
 using miApi.Mappers;
+using miApi.models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace miApi.Controllers
@@ -13,9 +15,11 @@ namespace miApi.Controllers
     public class CommentController : ControllerBase
     {
         private readonly ICommentepository _comment_repo;
-        public CommentController(ICommentepository commentepository)
+        private readonly IStockRepository _stock_repo;
+        public CommentController(ICommentepository commentepository, IStockRepository stockRepository)
         {
             _comment_repo = commentepository;
+            _stock_repo = stockRepository;
         }
 
         [HttpGet]
@@ -37,6 +41,20 @@ namespace miApi.Controllers
 
             return Ok(comment.ToCommentDto());
         
+        }
+
+        [HttpPost("{stockId}")]
+        public async Task<IActionResult> Create([FromRoute] int stockId,[FromBody] CreateCommentDto createCommentDto)
+        {
+            if(!await _stock_repo.StockExists(stockId))
+            {
+                return BadRequest("Stock does not exist");
+            }
+
+            var commentModel = createCommentDto.ToCommentFromCreate(stockId);
+            await _comment_repo.CreateAsync(commentModel);
+
+            return CreatedAtAction(nameof(GetById), new {id=commentModel}, commentModel.ToCommentDto());
         }
 
     }
