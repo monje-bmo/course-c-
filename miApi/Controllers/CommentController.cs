@@ -34,19 +34,19 @@ namespace miApi.Controllers
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             var comment = await _comment_repo.GetByIdAsync(id);
-            if(comment == null)
+            if (comment == null)
             {
                 return NotFound();
             }
 
             return Ok(comment.ToCommentDto());
-        
+
         }
 
         [HttpPost("{stockId}")]
-        public async Task<IActionResult> Create([FromRoute] int stockId,[FromBody] CreateCommentDto createCommentDto)
+        public async Task<IActionResult> Create([FromRoute] int stockId, [FromBody] CreateCommentDto createCommentDto)
         {
-            if(!await _stock_repo.StockExists(stockId))
+            if (!await _stock_repo.StockExists(stockId))
             {
                 return BadRequest("Stock does not exist");
             }
@@ -54,7 +54,20 @@ namespace miApi.Controllers
             var commentModel = createCommentDto.ToCommentFromCreate(stockId);
             await _comment_repo.CreateAsync(commentModel);
 
-            return CreatedAtAction(nameof(GetById), new {id=commentModel}, commentModel.ToCommentDto());
+            return CreatedAtAction(nameof(GetById), new { id = commentModel }, commentModel.ToCommentDto());
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentDto updateCommentDto)
+        {
+            var comment = await _comment_repo.UpdateCommentAsync(id, updateCommentDto.ToUpdateFromComment());
+            if (comment == null)
+            {
+                return NotFound("Comment not found");
+            }
+
+            return Ok(comment.ToCommentDto());
         }
 
     }
