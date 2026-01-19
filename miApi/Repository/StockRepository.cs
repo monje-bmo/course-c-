@@ -60,6 +60,17 @@ namespace miApi.Repository
                         .Where(s => s.Symbol.Contains(query.Symblo));
             }
 
+            if (!string.IsNullOrWhiteSpace(query.SortBy))
+            {
+                if (query.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
+                {
+                    stocks =
+                        query.IsDecsending
+                        ? stocks.OrderByDescending(s => s.Symbol)
+                        : stocks.OrderBy(s => s.Symbol);
+                }
+            }
+
             return await stocks.ToListAsync();
         }
 
