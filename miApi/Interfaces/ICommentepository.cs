@@ -13,5 +13,6 @@ namespace miApi.Interfaces
         Task<Comment?> GetByIdAsync(int id);
         Task<Comment> CreateAsync(Comment commentModel);
         Task<Comment?> UpdateCommentAsync(int id, Comment updateCommentDto);
+        Task<Comment?> DeleteCommentAsync(int id);
     }
 }
