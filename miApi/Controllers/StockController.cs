@@ -87,7 +87,7 @@ namespace miApi.Controllers
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
+        [Route("{id:int}")] 
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             if(!ModelState.IsValid)
