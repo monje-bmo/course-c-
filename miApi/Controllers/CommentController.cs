@@ -25,14 +25,20 @@ namespace miApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var comments = await _comment_repo.GetAllAsync();
             var commentDTO = comments.Select(c => c.ToCommentDto());
             return Ok(commentDTO);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
             var comment = await _comment_repo.GetByIdAsync(id);
             if (comment == null)
             {
@@ -43,9 +49,12 @@ namespace miApi.Controllers
 
         }
 
-        [HttpPost("{stockId}")]
+        [HttpPost("{stockId:int}")]
         public async Task<IActionResult> Create([FromRoute] int stockId, [FromBody] CreateCommentDto createCommentDto)
         {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
             if (!await _stock_repo.StockExists(stockId))
             {
                 return BadRequest("Stock does not exist");
@@ -58,9 +67,13 @@ namespace miApi.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{id:int}")]
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateCommentDto updateCommentDto)
         {
+
+            if(!ModelState.IsValid)
+                return BadRequest();
+
             var comment = await _comment_repo.UpdateCommentAsync(id, updateCommentDto.ToUpdateFromComment());
             if (comment == null)
             {
@@ -71,10 +84,12 @@ namespace miApi.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
-
+        [Route("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
+            if(!ModelState.IsValid)
+                return BadRequest();
+
             var comment = await _comment_repo.DeleteCommentAsync(id);
             if (comment == null)
             {
