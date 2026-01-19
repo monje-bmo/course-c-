@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using miApi.Data;
 using miApi.Dtos.Stock;
+using miApi.Helpers;
 using miApi.Interfaces;
 using miApi.Mappers;
 using miApi.models;
@@ -24,12 +25,12 @@ namespace miApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] QueryObject query)
         {
             if(!ModelState.IsValid)
                 return BadRequest();
 
-            var stocks = await _stockRepo.GetAllAsync();
+            var stocks = await _stockRepo.GetAllAsync(query);
             var stockDto = stocks.Select(s => s.ToStockDto());
             return Ok(stockDto);
         }

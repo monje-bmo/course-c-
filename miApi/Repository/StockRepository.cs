@@ -8,6 +8,7 @@ using miApi.Interfaces;
 using miApi.models;
 using Microsoft.EntityFrameworkCore;
 using miApi.Mappers;
+using miApi.Helpers;
 
 
 namespace miApi.Repository
@@ -33,16 +34,33 @@ namespace miApi.Repository
             if (stockModel == null)
             {
                 return null;
-            };
+            }
+            ;
 
             _context.Stock.Remove(stockModel);
             await _context.SaveChangesAsync();
-            return stockModel;  
+            return stockModel;
         }
 
-        public async Task<List<Stock>> GetAllAsync()
+        public async Task<List<Stock>> GetAllAsync(QueryObject query)
         {
-            return await _context.Stock.Include(c => c.Comments).ToListAsync();
+            var stocks = _context.Stock
+                .Include(c => c.Comments)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.CompanyName))
+            {
+                stocks = stocks
+                        .Where(s => s.CompanyName.Contains(query.CompanyName));
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Symblo))
+            {
+                stocks = stocks
+                        .Where(s => s.Symbol.Contains(query.Symblo));
+            }
+
+            return await stocks.ToListAsync();
         }
 
         public async Task<Stock?> GetByIdAsyn(int id)
