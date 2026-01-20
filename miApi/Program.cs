@@ -2,6 +2,7 @@ using miApi.Data;
 using miApi.Interfaces;
 using miApi.models;
 using miApi.Repository;
+using miApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.Options;
@@ -62,6 +63,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<ICommentepository, CommentRepository>();
+builder.Services.AddScoped<ITOkenServices, TokenService>();
 
 
 var app = builder.Build();

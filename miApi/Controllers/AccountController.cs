@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using miApi.Dtos.Account;
+using miApi.Interfaces;
 using miApi.models;
+using miApi.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,9 +16,11 @@ namespace miApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
-        public AccountController(UserManager<AppUser> userManager)
+        private readonly ITOkenServices _token;
+        public AccountController(UserManager<AppUser> userManager, ITOkenServices token)
         {
             _userManager = userManager;
+            _token = token;
         }
 
         [HttpPost("register")]
@@ -40,9 +44,16 @@ namespace miApi.Controllers
                     var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
                     if (roleResult.Succeeded)
                     {
-                        return Ok("User Created");
+                        return Ok(
+                            new NewUserDto
+                            {
+                                UserName = appUser.UserName,
+                                Email = appUser.Email,
+                                Token = _token.CreateToken(appUser)
+                            }
+                        );
                     }
-                    else
+                    else 
                     {
                         return StatusCode(500, roleResult.Errors);
                     }
